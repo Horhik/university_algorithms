@@ -9,9 +9,9 @@ pkgs.stdenv.mkDerivation {
     python310Packages.networkx
     python310Packages.scikit-learn
     python310Packages.numpy
-    python310Packages.scipy
-    python310Packages.jupyterlab
-    python310Packages.pip
+    #python310Packages.scipy
+    #python310Packages.jupyterlab
+    #python310Packages.pip
     
   ];
   shellHook = ''

@@ -47,38 +47,51 @@ class GraphVisualization:
     # nx.draw_networkx(G) - plots the graph 
     # plt.show() - displays the graph 
     def visualize(self): 
-        G = nx.Graph() 
+        G = nx.DiGraph(directed=True)
         G.add_edges_from(self.visual) 
-        nx.draw_networkx(G) 
+        nx.draw_networkx(G,arrows=True, with_labels=True) 
         plt.show() 
   
     
 class Vertex():
-    def __init__(self, connections):
+    def __init__(self, connections, distances):
         self.connections = connections
+        self.distances = distances
         self.visited = False
+        self.parent = None
 
     def visit(self):
         self.visited = True
+
 
             
 class Graph():
 
 
-    def __init__(self, node_count, max_connections=3):
+    def __init__(self, node_count, max_connections=3, max_distance=100):
         self.size = node_count
         self.nodes = {}
         self.G = GraphVisualization() 
         self.max_connections = max_connections
+        self.all_visited = False
+        self.visited = set()
+        self.start_node = None
+        
 
         for v in range(node_count):
-            self.nodes[v] = Vertex(set())
-
+            self.nodes[v] = Vertex(set(), {})
+        for v in range(node_count):
             # making random number of connections for each vertex
             connections = randint(1, max_connections)
             for i in range(connections):
                 vertex = randint(0, node_count - 1)
                 if vertex != v:
+
+                    dist = randint(1, max_distance)
+
+                    self.nodes[v].distances[vertex] = dist
+                    self.nodes[vertex].distances[v] = dist
+
                     self.nodes[v].connections.add(vertex)
                     self.G.addEdge(v, vertex) 
                     '''
@@ -106,6 +119,35 @@ class Graph():
         new_G.G = self.G
         return new_G
 
+    # method of visiting specific node and tracking if all nodes are visited 
+    def set_parent(self, node, parent):
+        print("set parent of ", node, ' to be ', parent)
+        self.nodes[node].parent = parent
+
+    def visit_node(self, node):
+        vert = self.nodes[node]
+        vert.visit()
+        self.visited.add(node)
+        self.all_visited = len(self.visited) == self.size
+
+     # Convert functions
+    def gen_from_dict_with_distances(self, dict):
+        self.nodes = {}
+        self.size = len(dict)
+        self.G = GraphVisualization() 
+
+        for v in dict:
+            dists = dict[v]
+            conns = [l for l in dists]
+
+            self.nodes[v] = Vertex(set(conns), dists)
+
+            # Add edges to G for visualisation
+            for el in dict[v]:
+                self.G.addEdge(v, el)
+
+   
+
     # Convert functions
     def gen_from_dict(self, dict):
         self.nodes = {}
@@ -113,7 +155,7 @@ class Graph():
         self.G = GraphVisualization() 
 
         for v in dict:
-            self.nodes[v] = Vertex(set(dict[v]))
+            self.nodes[v] = Vertex(set(dict[v]), {})
 
             # Add edges to G for visualisation
             for el in dict[v]:
