@@ -1,3 +1,4 @@
+inf = 5e+1000
 # Dictionary based graph
 def gen_graph(node_count, max_connections):
     graph = {}
@@ -144,6 +145,7 @@ class Graph():
 
             # Add edges to G for visualisation
             for el in dict[v]:
+                print('connecting ', el, ' with ', v)
                 self.G.addEdge(v, el)
 
    
@@ -160,6 +162,16 @@ class Graph():
             # Add edges to G for visualisation
             for el in dict[v]:
                 self.G.addEdge(v, el)
+    def turn_into_matrix(self):
+        n = self.size
+        m = [[0 if i == j else inf for j in range(n)] for i in range(n)]
+        for v in self.nodes:
+            dists = self.nodes[v].distances
+            for d in dists:
+                m[v][d] = dists[d]
+
+        return m
+            
 
     def make_dict(self):
         dict = {}

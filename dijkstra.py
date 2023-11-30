@@ -113,8 +113,15 @@ graph = {
     6: {4: 1}
 }
 
+
 g = Graph(6)
+
 g.gen_from_dict_with_distances(graph)
+
+m = g.turn_into_matrix()
+for i in m:
+    print(i)
+exit(0)
 #g.G.visualize()
 D = dijkstra(g, 0)
 print_distances(D)
