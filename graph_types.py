@@ -59,7 +59,10 @@ class Vertex():
         self.connections = connections
         self.distances = distances
         self.visited = False
+        self.processed = False
         self.parent = None
+        self.travel_time = -1
+        self.earliest_link = -1
 
     def visit(self):
         self.visited = True
@@ -77,6 +80,8 @@ class Graph():
         self.all_visited = False
         self.visited = set()
         self.start_node = None
+        self.timer = 0
+        self.on_stack = []
         
 
         for v in range(node_count):
