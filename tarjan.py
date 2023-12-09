@@ -9,7 +9,7 @@ SCC = []
             
 
 
-def dfs(graph, vertex):
+def dfs(graph, vertex, SCC_list):
     nodes = graph.nodes
 
     nodes[vertex].travel_time = graph.timer
@@ -28,26 +28,27 @@ def dfs(graph, vertex):
 
         elif nodes[v].travel_time == -1:
             # go deep into graph 
-            dfs(graph, v)
+            dfs(graph, v, SCC_list)
             nodes[vertex].earliest_link = min(nodes[v].earliest_link, nodes[vertex].earliest_link)
 
     # if current vertex is start vertex
     # that means dfs came to the beginning again and there's a cycle
-    print(" STACK IS ", stack)
+    print(" STACK IS ", stack, vertex)
     if nodes[vertex].earliest_link == nodes[vertex].travel_time:
         SCC = []
         popped = stack.pop()
         stack.append(popped)
         while popped != vertex:
+            print("STACK IS While", stack)
             popped = stack.pop()
             SCC.append(popped)
             graph.on_stack[popped] = False
-        if stack:
-            stack.pop()
         if vertex not in SCC:
             SCC.append(vertex)
-        SCC_list.append(SCC)
-    return
+        if not SCC in SCC_list:
+            print("SCC: ", SCC)
+            SCC_list.append(SCC)
+    return SCC_list
  
 def tarjan(graph):
     graph.timer = 0
@@ -60,7 +61,8 @@ def tarjan(graph):
             SCC = []
             stack = []
             graph.timer = 0
-            dfs(graph, v)
+            SCC_list = dfs(graph, v, SCC_list)
+            
     return SCC_list
       
 
@@ -85,3 +87,5 @@ g = Graph(8)
 g.gen_from_dict(graph)
 #g.G.visualize()
 slist = tarjan(g)
+print(slist)
+
