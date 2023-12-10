@@ -1,0 +1,367 @@
+
+* Общая статистика
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:22:40
+[[file:Общая_статистика/2023-12-10_23-22-40_screenshot.png]]
+
+* Task A
+#+begin_src python
+try:
+    func()
+    print("No Exceptions")
+except Exception as error:
+    print(type(error).__name__)
+
+#+end_src
+
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:14:29
+[[file:task_a/2023-12-10_23-14-29_screenshot.png]]
+
+* Task B
+#+begin_src python
+func(None, "")
+#+end_src
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:15:16
+[[file:Task_B/2023-12-10_23-15-16_screenshot.png]]
+
+* Task C
+#+begin_src python
+class byaka:
+    def __str__(self):
+        raise NotImplementedError
+
+    def __repr__(self):
+        raise NotImplementedError
+
+
+func(byaka(), byaka(), byaka())
+#+end_src
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:16:19
+[[file:Task_C/2023-12-10_23-16-19_screenshot.png]]
+
+* Task D
+#+begin_src python
+def only_positive_even_sum(a, b):
+    if not (type(a).__name__ == 'int' and type(b).__name__ == 'int'):
+        raise TypeError
+    if a < 0 or b < 0 or a % 2 != 0 or b % 2 != 0:
+        raise ValueError
+    return a + b
+
+#+end_src
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:17:00
+[[file:Task_D/2023-12-10_23-17-00_screenshot.png]]
+
+* Task E
+#+begin_src python
+def is_tuple(a):
+    try:
+        for k in a:
+            return True
+    except Exception as e:
+        e 
+        return False
+    return True
+
+
+def t_name(t):
+    return type(t).__name__
+
+
+def all_of_type(tp, dataset):
+    return all(map(lambda x: isinstance(x, type(tp)), dataset))
+
+
+def merge(t1, t2):
+    if not (is_tuple(t1) and is_tuple(t2)):
+        raise StopIteration
+        
+    t1 = list(t1)
+    t2 = list(t2)
+    if len(t1) == 0 and len(t2) == 0:
+        return []
+    if len(t1) != 0:
+        test = t1[0]
+    if len(t2) != 0:
+        test = t2[0]       
+
+    if not all_of_type(test, t1) or not all_of_type(test, t2):
+        raise TypeError
+
+    if list(t1) != list(sorted(t1)) or list(t2) != list(sorted(t2)):
+        raise ValueError
+    
+    return sorted(t1 + t2)
+#+end_src
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:17:53
+[[file:Task_E/2023-12-10_23-17-53_screenshot.png]]
+
+* Task F
+Реально корень зла. Я без понятия
+#+begin_src python
+ from math import sqrt
+
+
+from fractions import Fraction
+
+
+def is_rational(number):
+    try:
+        # Пытаемся создать объект Fraction из переменной
+        Fraction(number)
+        return True
+    except ValueError:
+        ValueError
+        return False
+
+
+class InfiniteSolutionsError(Exception):
+    pass
+
+
+class NoSolutionsError(Exception):
+    pass
+
+
+def not_all_float(a, b, c):
+    return not all(list(map(lambda x: is_rational(x), [a, b, c])))
+
+
+def find_roots(a, b, c):
+    if not_all_float(a, b, c,):
+        raise TypeError
+
+    if a == b == c == 0:
+        raise InfiniteSolutionsError
+
+    if a == b == 0 and c != 0:
+        raise NoSolutionsError
+
+    if a == 0 and b != 0:
+        return ((-c / b, -c / b))
+
+    D = b**2 - 4 * a * c
+
+    if D < 0 or a == b == 0 != c:
+        raise NoSolutionsError
+    
+    return (((-b - sqrt(D)) / 2 * a), ((-b + sqrt(D)) / 2 * a)) 
+#+end_src
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:18:44
+[[file:Task_F/2023-12-10_23-18-44_screenshot.png]]
+
+
+* Task G
+#+begin_src python
+ class CyrillicError(Exception):
+    "Raised when word contains not only cyrillic letters?"
+    pass
+
+
+class CapitalError(Exception):
+    "Raised when name not starting from Capital Letter"
+    pass
+
+
+def name_validation(name):
+    cyrillic_lower_letters = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+    cyrillic_letters = cyrillic_lower_letters + cyrillic_lower_letters.upper()
+    if type(name).__name__ != 'str':
+        raise TypeError
+
+    for char in name:
+        if char not in cyrillic_letters:
+            raise CyrillicError
+
+    if name[0] not in cyrillic_lower_letters.upper() or not all(map(lambda x: x in cyrillic_lower_letters, name[1:])):
+        raise CapitalError
+    
+    return (name) 
+#+end_src
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:19:21
+[[file:Task_G/2023-12-10_23-19-21_screenshot.png]]
+
+* Task H
+#+begin_src python
+ class BadCharacterError(Exception):
+    pass
+
+
+class StartsWithDigitError(Exception):
+    pass
+
+
+def is_not_str(name):
+    return type(name).__name__ != 'str'
+
+
+def there_weird_symbols(name):
+    for char in name:
+        if char not in "1234567890" + 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' + '_':
+            return True
+    return False
+
+
+def start_from_digit(name):
+    return name[0] in "1234567890"
+
+
+def username_validation(name):
+    if is_not_str(name):
+        raise TypeError
+
+    if there_weird_symbols(name):
+        raise BadCharacterError
+
+    if start_from_digit(name):
+        raise StartsWithDigitError
+    
+    return name 
+#+end_src
+
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:20:12
+[[file:Task_H/2023-12-10_23-20-12_screenshot.png]]
+
+* Task I
+#+begin_src python
+ class CyrillicError(Exception):
+    "Raised when word contains not only cyrillic letters?"
+    pass
+
+
+class CapitalError(Exception):
+    "Raised when name not starting from Capital Letter"
+    pass
+
+
+def name_validation(name):
+    cyrillic_lower_letters = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+    cyrillic_letters = cyrillic_lower_letters + cyrillic_lower_letters.upper()
+    if type(name).__name__ != 'str':
+        raise TypeError
+
+    for char in name:
+        if char not in cyrillic_letters:
+            raise CyrillicError
+
+    if name[0] not in cyrillic_lower_letters.upper() or not all(map(lambda x: x in cyrillic_lower_letters, name[1:])):
+        raise CapitalError
+    
+    return (name)
+    
+    
+class BadCharacterError(Exception):
+    pass
+
+
+class StartsWithDigitError(Exception):
+    pass
+
+
+def is_not_str(name):
+    return type(name).__name__ != 'str'
+
+
+def there_weird_symbols(name):
+    for char in name:
+        if char not in "1234567890" + 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' + '_':
+            return True
+    return False
+
+
+def start_from_digit(name):
+    return name[0] in "1234567890"
+
+
+def username_validation(name):
+    if is_not_str(name):
+        raise TypeError
+
+    if there_weird_symbols(name):
+        raise BadCharacterError
+
+    if start_from_digit(name):
+        raise StartsWithDigitError
+    
+    return name
+
+
+def user_validation(**kwargs):
+    required = ['last_name', 'first_name', 'username']
+    args = {}
+    for key, value in kwargs.items():
+        args[key] = value
+        if key not in required:
+            raise KeyError
+    if len(kwargs.items()) != 3:
+        raise KeyError
+    
+    last_name, first_name, username = args['last_name'], args['first_name'], args['username']
+    if not all(map(lambda x: isinstance(x, str), [last_name, first_name, username])):
+        raise TypeError
+
+    last_name = name_validation(last_name)
+    first_name = name_validation(first_name)
+    username = username_validation(username)
+
+    return {'last_name': last_name, 'first_name': first_name, 'username': username}
+     
+#+end_src
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:20:27
+[[file:Task_B/2023-12-10_23-20-27_screenshot.png]]
+
+* Task J
+#+begin_src python
+import string
+import hashlib
+
+
+class MinLengthError(Exception):
+    pass 
+
+
+class PossibleCharError(Exception):
+    pass
+
+
+class NeedCharError(Exception):
+    pass
+
+
+default = string.ascii_letters + "1234567890"
+
+
+def password_validation(pwd, min_length=8, possible_chars=default, at_least_one=str.isdigit):
+    if type(pwd).__name__ != 'str':
+        raise TypeError
+
+    if len(pwd) < min_length:
+        raise MinLengthError
+
+    alo = False
+    for char in pwd:
+        if char not in possible_chars:
+            raise PossibleCharError
+        if at_least_one(char):
+            alo = True
+            
+    if not alo:
+        raise NeedCharError
+        
+    return hashlib.sha256(pwd.encode('utf-8')).hexdigest()
+
+#+end_src
+
+
+
+#+DOWNLOADED: screenshot @ 2023-12-10 23:22:13
+[[file:Task_J/2023-12-10_23-22-13_screenshot.png]]
