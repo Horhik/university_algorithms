@@ -66,13 +66,20 @@ class Vertex():
 
     def visit(self):
         self.visited = True
+    def pop(self):
+        if self.connections:
+            return self.connections.pop()
+        return None
+    def remove(self, connection):
+        if self.connections:
+            self.connections = [path for path in self.connections if connection != path]
 
 
             
 class Graph():
 
 
-    def __init__(self, node_count, max_connections=3, max_distance=100):
+    def __init__(self, node_count, max_connections=3, max_distance=100, initial_dict=None, dict_with_distances=False):
         self.size = node_count
         self.nodes = {}
         self.G = GraphVisualization() 
@@ -82,6 +89,15 @@ class Graph():
         self.start_node = None
         self.timer = 0
         self.on_stack = []
+
+        if initial_dict:
+            if dict_with_distances:
+                self.gen_from_dict_with_distances(initial_dict)
+                return
+            else:
+                self.gen_from_dict(initial_dict)
+                return
+
         
 
         for v in range(node_count):
